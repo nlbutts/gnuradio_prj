@@ -1,0 +1,2 @@
+c2dec 1200 test.bits test.raw --natural
+play -t raw -r 8000 -e signed-integer -b 16 test.raw

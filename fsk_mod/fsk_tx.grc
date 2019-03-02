@@ -90,30 +90,38 @@
     </param>
   </block>
   <block>
-    <key>variable_constellation</key>
+    <key>variable_cc_encoder_def</key>
+    <param>
+      <key>padding</key>
+      <value>False</value>
+    </param>
     <param>
       <key>comment</key>
       <value></value>
     </param>
     <param>
-      <key>const_points</key>
-      <value>[-1-1j, -1+1j, 1+1j, 1-1j]</value>
+      <key>k</key>
+      <value>k</value>
     </param>
     <param>
-      <key>type</key>
-      <value>qpsk</value>
+      <key>dim1</key>
+      <value>1</value>
     </param>
     <param>
-      <key>dims</key>
+      <key>dim2</key>
       <value>1</value>
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>True</value>
+    </param>
+    <param>
+      <key>framebits</key>
+      <value>frame_size*8</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(776, 148)</value>
+      <value>(160, 296)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -121,23 +129,27 @@
     </param>
     <param>
       <key>id</key>
-      <value>const</value>
+      <value>enc_cc</value>
     </param>
     <param>
-      <key>rot_sym</key>
-      <value>4</value>
+      <key>ndim</key>
+      <value>0</value>
     </param>
     <param>
-      <key>soft_dec_lut</key>
-      <value>None</value>
+      <key>polys</key>
+      <value>polys</value>
     </param>
     <param>
-      <key>precision</key>
-      <value>8</value>
+      <key>rate</key>
+      <value>rate</value>
     </param>
     <param>
-      <key>sym_map</key>
-      <value>[0, 1, 3, 2]</value>
+      <key>state_start</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>mode</key>
+      <value>fec.CC_STREAMING</value>
     </param>
   </block>
   <block>
@@ -160,7 +172,7 @@
     </param>
     <param>
       <key>gui_hint</key>
-      <value>(0, 1, 1, 1)</value>
+      <value>(0,1,1,1)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -223,7 +235,7 @@
     </param>
     <param>
       <key>gui_hint</key>
-      <value>(0, 0, 1, 1)</value>
+      <value>(0,0,1,1)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -286,7 +298,7 @@
     </param>
     <param>
       <key>gui_hint</key>
-      <value>(1, 0, 1, 1)</value>
+      <value>(1,0,1,1)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -330,14 +342,10 @@
     </param>
   </block>
   <block>
-    <key>variable_constellation_rect</key>
+    <key>variable</key>
     <param>
       <key>comment</key>
       <value></value>
-    </param>
-    <param>
-      <key>const_points</key>
-      <value>[0.707+0.707j, -0.707+0.707j, -0.707-0.707j, 0.707-0.707j]</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -345,7 +353,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1008, 464)</value>
+      <value>(16, 300)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -353,39 +361,65 @@
     </param>
     <param>
       <key>id</key>
-      <value>qpsk</value>
+      <value>k</value>
     </param>
     <param>
-      <key>imag_sect</key>
+      <key>value</key>
+      <value>7</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(56, 364)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>polys</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>[109, 79]</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(80, 300)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>rate</value>
+    </param>
+    <param>
+      <key>value</key>
       <value>2</value>
-    </param>
-    <param>
-      <key>real_sect</key>
-      <value>2</value>
-    </param>
-    <param>
-      <key>rot_sym</key>
-      <value>4</value>
-    </param>
-    <param>
-      <key>soft_dec_lut</key>
-      <value>None</value>
-    </param>
-    <param>
-      <key>precision</key>
-      <value>8</value>
-    </param>
-    <param>
-      <key>sym_map</key>
-      <value>[0, 1, 2, 3]</value>
-    </param>
-    <param>
-      <key>w_imag_sect</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>w_real_sect</key>
-      <value>1</value>
     </param>
   </block>
   <block>
@@ -439,7 +473,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>8</value>
+      <value>200</value>
     </param>
   </block>
   <block>
@@ -462,7 +496,7 @@
     </param>
     <param>
       <key>gui_hint</key>
-      <value>(1, 1, 1, 1)</value>
+      <value>(1,1,1,1)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -521,11 +555,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(616, 356)</value>
+      <value>(824, 372)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -572,7 +606,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(624, 244)</value>
+      <value>(912, 228)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -615,7 +649,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(344, 244)</value>
+      <value>(384, 156)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -658,7 +692,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(24, 228)</value>
+      <value>(24, 140)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -717,7 +751,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(184, 248)</value>
+      <value>(216, 160)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -749,7 +783,11 @@
     </param>
   </block>
   <block>
-    <key>digital_constellation_modulator</key>
+    <key>digital_gmsk_mod</key>
+    <param>
+      <key>bt</key>
+      <value>0.35</value>
+    </param>
     <param>
       <key>alias</key>
       <value></value>
@@ -759,28 +797,16 @@
       <value></value>
     </param>
     <param>
-      <key>constellation</key>
-      <value>qpsk</value>
-    </param>
-    <param>
       <key>affinity</key>
       <value></value>
     </param>
     <param>
-      <key>differential</key>
+      <key>_enabled</key>
       <value>True</value>
     </param>
     <param>
-      <key>_enabled</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>excess_bw</key>
-      <value>0.35</value>
-    </param>
-    <param>
       <key>_coordinate</key>
-      <value>(752, 220)</value>
+      <value>(1072, 220)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -788,7 +814,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>digital_constellation_modulator_0</value>
+      <value>digital_gmsk_mod_0</value>
     </param>
     <param>
       <key>log</key>
@@ -804,7 +830,7 @@
     </param>
     <param>
       <key>samples_per_symbol</key>
-      <value>sps</value>
+      <value>8</value>
     </param>
     <param>
       <key>verbose</key>
@@ -831,7 +857,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(488, 228)</value>
+      <value>(560, 212)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -839,7 +865,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>digital_scrambler_bb_0_0</value>
+      <value>digital_scrambler_bb_0</value>
     </param>
     <param>
       <key>len</key>
@@ -860,6 +886,104 @@
     <param>
       <key>seed</key>
       <value>0x7F</value>
+    </param>
+  </block>
+  <block>
+    <key>fec_extended_encoder</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>encoder_list</key>
+      <value>enc_cc</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(688, 212)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>fec_extended_encoder_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>puncpat</key>
+      <value>'11'</value>
+    </param>
+    <param>
+      <key>threadtype</key>
+      <value>none</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(24, 428)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>frame_size</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Frame Size</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>hide</key>
+      <value>none</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>intx</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>60</value>
     </param>
   </block>
   <block>
@@ -1030,105 +1154,6 @@
     <param>
       <key>name</key>
       <value>rrc</value>
-    </param>
-    <param>
-      <key>plotconst</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>plotfreq</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>plottime</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>plotwaterfall</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>showports</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>showrf</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>rate</key>
-      <value>10</value>
-    </param>
-    <param>
-      <key>wintype</key>
-      <value>firdes.WIN_BLACKMAN_hARRIS</value>
-    </param>
-  </block>
-  <block>
-    <key>qtgui_sink_x</key>
-    <param>
-      <key>bw</key>
-      <value>samp_rate</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>fc</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>freqchangevar</key>
-      <value>None</value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>fftsize</key>
-      <value>1024</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(1000, 84)</value>
-    </param>
-    <param>
-      <key>gui_hint</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>qtgui_sink_x_0_0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>name</key>
-      <value>""</value>
     </param>
     <param>
       <key>plotconst</key>
@@ -1566,11 +1591,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(832, 340)</value>
+      <value>(1040, 356)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -1909,13 +1934,13 @@
   </connection>
   <connection>
     <source_block_id>blocks_pack_k_bits_bb_0</source_block_id>
-    <sink_block_id>digital_constellation_modulator_0</sink_block_id>
+    <sink_block_id>digital_gmsk_mod_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>blocks_unpack_k_bits_bb_0</source_block_id>
-    <sink_block_id>digital_scrambler_bb_0_0</sink_block_id>
+    <sink_block_id>digital_scrambler_bb_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1932,31 +1957,37 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>digital_constellation_modulator_0</source_block_id>
+    <source_block_id>digital_gmsk_mod_0</source_block_id>
     <sink_block_id>limesdr_sink_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>digital_constellation_modulator_0</source_block_id>
+    <source_block_id>digital_gmsk_mod_0</source_block_id>
     <sink_block_id>qtgui_sink_x_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>digital_constellation_modulator_0</source_block_id>
-    <sink_block_id>qtgui_sink_x_0_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>digital_constellation_modulator_0</source_block_id>
+    <source_block_id>digital_gmsk_mod_0</source_block_id>
     <sink_block_id>qtgui_time_sink_x_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>digital_scrambler_bb_0_0</source_block_id>
+    <source_block_id>digital_scrambler_bb_0</source_block_id>
+    <sink_block_id>fec_extended_encoder_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>fec_extended_encoder_0</source_block_id>
+    <sink_block_id>blocks_char_to_float_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>fec_extended_encoder_0</source_block_id>
     <sink_block_id>blocks_pack_k_bits_bb_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>

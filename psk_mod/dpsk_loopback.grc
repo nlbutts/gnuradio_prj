@@ -356,7 +356,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(272, 412)</value>
+      <value>(272, 644)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -403,7 +403,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(712, 412)</value>
+      <value>(712, 644)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -454,7 +454,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(808, 156)</value>
+      <value>(616, 140)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -592,6 +592,69 @@
     </param>
   </block>
   <block>
+    <key>channels_channel_model</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>block_tags</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>epsilon</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>freq_offset</key>
+      <value>0.0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(808, 108)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>channels_channel_model_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>noise_voltage</key>
+      <value>0.0</value>
+    </param>
+    <param>
+      <key>seed</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>taps</key>
+      <value>1.0 + 1.0j</value>
+    </param>
+  </block>
+  <block>
     <key>digital_constellation_modulator</key>
     <param>
       <key>alias</key>
@@ -623,7 +686,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(536, 124)</value>
+      <value>(384, 116)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -678,7 +741,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(816, 216)</value>
+      <value>(816, 448)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -733,7 +796,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(496, 412)</value>
+      <value>(496, 644)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -784,7 +847,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(472, 248)</value>
+      <value>(472, 480)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -1122,7 +1185,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(24, 388)</value>
+      <value>(24, 620)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -1840,13 +1903,7 @@
   </connection>
   <connection>
     <source_block_id>blocks_throttle_0_0</source_block_id>
-    <sink_block_id>digital_constellation_receiver_cb_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>blocks_throttle_0_0</source_block_id>
-    <sink_block_id>qtgui_sink_x_0</sink_block_id>
+    <sink_block_id>channels_channel_model_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1865,6 +1922,18 @@
   <connection>
     <source_block_id>blocks_vector_source_x_0</source_block_id>
     <sink_block_id>digital_constellation_modulator_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>channels_channel_model_0</source_block_id>
+    <sink_block_id>digital_constellation_receiver_cb_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>channels_channel_model_0</source_block_id>
+    <sink_block_id>qtgui_sink_x_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>

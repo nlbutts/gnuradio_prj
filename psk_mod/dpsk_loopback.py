@@ -5,7 +5,7 @@
 # Title: DPSK Loopback
 # Author: GNU Radio
 # Description: Encode a signal into a packet, modulate, demodulate, decode and show it's the same data.
-# Generated: Fri Mar  1 07:44:57 2019
+# Generated: Tue Mar  5 06:24:56 2019
 ##################################################
 
 if __name__ == '__main__':
@@ -20,8 +20,10 @@ if __name__ == '__main__':
 
 from PyQt4 import Qt
 from gnuradio import blocks
+from gnuradio import channels
 from gnuradio import digital
 from gnuradio import eng_notation
+from gnuradio import fec
 from gnuradio import gr
 from gnuradio import qtgui
 from gnuradio.eng_option import eng_option
@@ -65,6 +67,12 @@ class dpsk_loopback(gr.top_block, Qt.QWidget):
         ##################################################
         self.samp_rate = samp_rate = 10000
         self.freq = freq = 500
+
+
+        self.enc = enc = fec.ldpc_encoder_make('C:\\Program Files\\GNURadio-3.7\\share\\gnuradio\\fec\\ldpc\\simple_g_matrix.alist');
+
+
+        self.dec = dec = fec.ldpc_decoder.make('C:\\Program Files\\GNURadio-3.7\\share\\gnuradio\\fec\\ldpc\\simple_g_matrix.alist', 0.5, 50);
 
         self.const = const = digital.constellation_bpsk().base()
 
@@ -221,6 +229,9 @@ class dpsk_loopback(gr.top_block, Qt.QWidget):
         self._freq_range = Range(0, 5000, 1, 500, 200)
         self._freq_win = RangeWidget(self._freq_range, self.set_freq, "freq", "counter_slider", float)
         self.top_grid_layout.addWidget(self._freq_win)
+        self.fec_extended_encoder_0 = fec.extended_encoder(encoder_obj_list=enc, threading= None, puncpat='11')
+        self.fec_extended_decoder_0 = fec.extended_decoder(decoder_obj_list=dec, threading= None, ann=None, puncpat='11', integration_period=10000)
+        self.digital_map_bb_0 = digital.map_bb(([-1, 1]))
         self.digital_diff_decoder_bb_0 = digital.diff_decoder_bb(2)
         self.digital_constellation_receiver_cb_0 = digital.constellation_receiver_cb(const, 62.8e-3, -1000, 1000)
         self.digital_constellation_modulator_0 = digital.generic_mod(
@@ -232,10 +243,20 @@ class dpsk_loopback(gr.top_block, Qt.QWidget):
           verbose=False,
           log=False,
           )
+        self.channels_channel_model_0 = channels.channel_model(
+        	noise_voltage=0.1,
+        	frequency_offset=0,
+        	epsilon=1.0,
+        	taps=(1.0 + 1.0j, ),
+        	noise_seed=0,
+        	block_tags=False
+        )
         self.blocks_vector_source_x_0 = blocks.vector_source_b((0, 0, 0x55, 0x55 ), True, 1, [])
         self.blocks_unpack_k_bits_bb_0 = blocks.unpack_k_bits_bb(8)
         self.blocks_throttle_0_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
+        self.blocks_pack_k_bits_bb_0 = blocks.pack_k_bits_bb(8)
         self.blocks_keep_one_in_n_0 = blocks.keep_one_in_n(gr.sizeof_char*1, 4)
+        self.blocks_char_to_float_1_0 = blocks.char_to_float(1, 1)
         self.blocks_char_to_float_1 = blocks.char_to_float(1, 1)
         self.blocks_char_to_float_0 = blocks.char_to_float(1, 1)
 
@@ -246,18 +267,24 @@ class dpsk_loopback(gr.top_block, Qt.QWidget):
         ##################################################
         self.connect((self.blocks_char_to_float_0, 0), (self.qtgui_time_sink_x_1_1, 0))
         self.connect((self.blocks_char_to_float_1, 0), (self.qtgui_time_sink_x_0_0, 0))
+        self.connect((self.blocks_char_to_float_1_0, 0), (self.fec_extended_decoder_0, 0))
         self.connect((self.blocks_keep_one_in_n_0, 0), (self.digital_diff_decoder_bb_0, 0))
-        self.connect((self.blocks_throttle_0_0, 0), (self.digital_constellation_receiver_cb_0, 0))
-        self.connect((self.blocks_throttle_0_0, 0), (self.qtgui_sink_x_0, 0))
+        self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.digital_constellation_modulator_0, 0))
+        self.connect((self.blocks_throttle_0_0, 0), (self.channels_channel_model_0, 0))
         self.connect((self.blocks_unpack_k_bits_bb_0, 0), (self.blocks_char_to_float_0, 0))
+        self.connect((self.blocks_unpack_k_bits_bb_0, 0), (self.fec_extended_encoder_0, 0))
         self.connect((self.blocks_vector_source_x_0, 0), (self.blocks_unpack_k_bits_bb_0, 0))
-        self.connect((self.blocks_vector_source_x_0, 0), (self.digital_constellation_modulator_0, 0))
+        self.connect((self.channels_channel_model_0, 0), (self.digital_constellation_receiver_cb_0, 0))
+        self.connect((self.channels_channel_model_0, 0), (self.qtgui_sink_x_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.blocks_throttle_0_0, 0))
         self.connect((self.digital_constellation_receiver_cb_0, 0), (self.blocks_keep_one_in_n_0, 0))
         self.connect((self.digital_constellation_receiver_cb_0, 1), (self.qtgui_number_sink_0, 0))
         self.connect((self.digital_constellation_receiver_cb_0, 3), (self.qtgui_number_sink_0, 2))
         self.connect((self.digital_constellation_receiver_cb_0, 2), (self.qtgui_number_sink_0, 1))
-        self.connect((self.digital_diff_decoder_bb_0, 0), (self.blocks_char_to_float_1, 0))
+        self.connect((self.digital_diff_decoder_bb_0, 0), (self.digital_map_bb_0, 0))
+        self.connect((self.digital_map_bb_0, 0), (self.blocks_char_to_float_1_0, 0))
+        self.connect((self.fec_extended_decoder_0, 0), (self.blocks_char_to_float_1, 0))
+        self.connect((self.fec_extended_encoder_0, 0), (self.blocks_pack_k_bits_bb_0, 0))
 
     def closeEvent(self, event):
         self.settings = Qt.QSettings("GNU Radio", "dpsk_loopback")
@@ -279,6 +306,18 @@ class dpsk_loopback(gr.top_block, Qt.QWidget):
 
     def set_freq(self, freq):
         self.freq = freq
+
+    def get_enc(self):
+        return self.enc
+
+    def set_enc(self, enc):
+        self.enc = enc
+
+    def get_dec(self):
+        return self.dec
+
+    def set_dec(self, dec):
+        self.dec = dec
 
     def get_const(self):
         return self.const

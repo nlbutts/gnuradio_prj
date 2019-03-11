@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Top Block
-# Generated: Sat Mar  2 21:54:12 2019
+# Generated: Sat Mar  9 14:25:28 2019
 ##################################################
 
 if __name__ == '__main__':
@@ -74,16 +74,15 @@ class top_block(gr.top_block, Qt.QWidget):
         self.polys = polys = [109, 79]
         self.k = k = 7
         self.sps = sps = 200
-        self.samp_rate = samp_rate = 1e6
+        self.samp_rate = samp_rate = 2.5e6
         self.rf_gain = rf_gain = 60
-        self.packet_len = packet_len = 50
-        self.lpfilter = lpfilter = 10000
+        self.lpfilter = lpfilter = 110000
         self.ftune = ftune = 915e6
         self.fft_len = fft_len = 64
         self.fadj = fadj = -200000
 
 
-        self.dec_cc = dec_cc = fec.cc_decoder.make(frame_size, k, rate, (polys), 0, -1, fec.CC_STREAMING, False)
+        self.dec = dec = fec.cc_decoder.make(frame_size, k, rate, (polys), 0, -1, fec.CC_STREAMING, False)
 
 
         ##################################################
@@ -96,7 +95,7 @@ class top_block(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._lpfilter_range = Range(0, 50000, 100, 10000, 200)
+        self._lpfilter_range = Range(0, 200000, 100, 110000, 200)
         self._lpfilter_win = RangeWidget(self._lpfilter_range, self.set_lpfilter, 'lpfilter', "counter_slider", int)
         self.top_grid_layout.addWidget(self._lpfilter_win, 1, 0, 1, 1)
         for r in range(1, 2):
@@ -166,54 +165,6 @@ class top_block(gr.top_block, Qt.QWidget):
 
         self._qtgui_waterfall_sink_x_0_win = sip.wrapinstance(self.qtgui_waterfall_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_grid_layout.addWidget(self._qtgui_waterfall_sink_x_0_win)
-        self.qtgui_time_sink_x_0 = qtgui.time_sink_f(
-        	1024, #size
-        	samp_rate, #samp_rate
-        	'Scope Plot', #name
-        	1 #number of inputs
-        )
-        self.qtgui_time_sink_x_0.set_update_time(0.10)
-        self.qtgui_time_sink_x_0.set_y_axis(-1, 1)
-
-        self.qtgui_time_sink_x_0.set_y_label('Amplitude', "")
-
-        self.qtgui_time_sink_x_0.enable_tags(-1, True)
-        self.qtgui_time_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, 0, "")
-        self.qtgui_time_sink_x_0.enable_autoscale(True)
-        self.qtgui_time_sink_x_0.enable_grid(False)
-        self.qtgui_time_sink_x_0.enable_axis_labels(True)
-        self.qtgui_time_sink_x_0.enable_control_panel(False)
-        self.qtgui_time_sink_x_0.enable_stem_plot(False)
-
-        if not True:
-          self.qtgui_time_sink_x_0.disable_legend()
-
-        labels = ['', '', '', '', '',
-                  '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-                  1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-                  "magenta", "yellow", "dark red", "dark green", "blue"]
-        styles = [1, 1, 1, 1, 1,
-                  1, 1, 1, 1, 1]
-        markers = [-1, -1, -1, -1, -1,
-                   -1, -1, -1, -1, -1]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-                  1.0, 1.0, 1.0, 1.0, 1.0]
-
-        for i in xrange(1):
-            if len(labels[i]) == 0:
-                self.qtgui_time_sink_x_0.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_time_sink_x_0.set_line_label(i, labels[i])
-            self.qtgui_time_sink_x_0.set_line_width(i, widths[i])
-            self.qtgui_time_sink_x_0.set_line_color(i, colors[i])
-            self.qtgui_time_sink_x_0.set_line_style(i, styles[i])
-            self.qtgui_time_sink_x_0.set_line_marker(i, markers[i])
-            self.qtgui_time_sink_x_0.set_line_alpha(i, alphas[i])
-
-        self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.pyqwidget(), Qt.QWidget)
-        self.top_grid_layout.addWidget(self._qtgui_time_sink_x_0_win)
         self.qtgui_sink_x_0 = qtgui.sink_c(
         	1024, #fftsize
         	firdes.WIN_BLACKMAN_hARRIS, #wintype
@@ -234,6 +185,7 @@ class top_block(gr.top_block, Qt.QWidget):
 
 
         self.freq_xlating_fir_filter_xxx_0 = filter.freq_xlating_fir_filter_ccc(10, (firdes.low_pass(1, samp_rate, lpfilter, 1000)), fadj, samp_rate)
+        self.fec_extended_decoder_0 = fec.extended_decoder(decoder_obj_list=dec, threading= None, ann=None, puncpat='11', integration_period=10000)
         self.digital_ofdm_rx_0 = digital.ofdm_rx(
         	  fft_len=fft_len, cp_len=fft_len/4,
         	  frame_length_tag_key='frame_'+"rx_len",
@@ -243,19 +195,28 @@ class top_block(gr.top_block, Qt.QWidget):
         	  debug_log=False,
         	  scramble_bits=True
         	 )
+        self.digital_map_bb_0 = digital.map_bb(([-1, 1]))
         self.blocks_unpack_k_bits_bb_0 = blocks.unpack_k_bits_bb(8)
-        self.blocks_uchar_to_float_0 = blocks.uchar_to_float()
-        self.blocks_tag_debug_0 = blocks.tag_debug(gr.sizeof_char*1, 'Rx Packets', ""); self.blocks_tag_debug_0.set_display(True)
+        self.blocks_probe_rate_0 = blocks.probe_rate(gr.sizeof_char*1, 500.0, 0.15)
+        self.blocks_pack_k_bits_bb_0 = blocks.pack_k_bits_bb(8)
+        self.blocks_message_debug_0 = blocks.message_debug()
+        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_char*1, 'C:\\projects\\gnuradio_prj\\ofdm\\outrx.mkv', False)
+        self.blocks_file_sink_0.set_unbuffered(False)
+        self.blocks_char_to_float_0 = blocks.char_to_float(1, 1)
 
 
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.blocks_uchar_to_float_0, 0), (self.qtgui_time_sink_x_0, 0))
-        self.connect((self.blocks_unpack_k_bits_bb_0, 0), (self.blocks_uchar_to_float_0, 0))
-        self.connect((self.digital_ofdm_rx_0, 0), (self.blocks_tag_debug_0, 0))
+        self.msg_connect((self.blocks_probe_rate_0, 'rate'), (self.blocks_message_debug_0, 'print'))
+        self.connect((self.blocks_char_to_float_0, 0), (self.fec_extended_decoder_0, 0))
+        self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.blocks_file_sink_0, 0))
+        self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.blocks_probe_rate_0, 0))
+        self.connect((self.blocks_unpack_k_bits_bb_0, 0), (self.digital_map_bb_0, 0))
+        self.connect((self.digital_map_bb_0, 0), (self.blocks_char_to_float_0, 0))
         self.connect((self.digital_ofdm_rx_0, 0), (self.blocks_unpack_k_bits_bb_0, 0))
+        self.connect((self.fec_extended_decoder_0, 0), (self.blocks_pack_k_bits_bb_0, 0))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.digital_ofdm_rx_0, 0))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.qtgui_sink_x_0, 0))
         self.connect((self.rtlsdr_source_0, 0), (self.freq_xlating_fir_filter_xxx_0, 0))
@@ -303,7 +264,6 @@ class top_block(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate
         self.rtlsdr_source_0.set_sample_rate(self.samp_rate)
         self.qtgui_waterfall_sink_x_0.set_frequency_range(0, self.samp_rate)
-        self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
         self.qtgui_sink_x_0.set_frequency_range(0, self.samp_rate/10)
         self.freq_xlating_fir_filter_xxx_0.set_taps((firdes.low_pass(1, self.samp_rate, self.lpfilter, 1000)))
 
@@ -313,12 +273,6 @@ class top_block(gr.top_block, Qt.QWidget):
     def set_rf_gain(self, rf_gain):
         self.rf_gain = rf_gain
         self.rtlsdr_source_0.set_gain(self.rf_gain, 0)
-
-    def get_packet_len(self):
-        return self.packet_len
-
-    def set_packet_len(self, packet_len):
-        self.packet_len = packet_len
 
     def get_lpfilter(self):
         return self.lpfilter
@@ -347,11 +301,11 @@ class top_block(gr.top_block, Qt.QWidget):
         self.fadj = fadj
         self.freq_xlating_fir_filter_xxx_0.set_center_freq(self.fadj)
 
-    def get_dec_cc(self):
-        return self.dec_cc
+    def get_dec(self):
+        return self.dec
 
-    def set_dec_cc(self, dec_cc):
-        self.dec_cc = dec_cc
+    def set_dec(self, dec):
+        self.dec = dec
 
 
 def argument_parser():

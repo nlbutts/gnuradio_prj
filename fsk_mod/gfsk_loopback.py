@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Gfsk Loopback
-# Generated: Fri Mar  1 03:13:44 2019
+# Generated: Sun Mar  3 07:24:39 2019
 ##################################################
 
 if __name__ == '__main__':
@@ -20,6 +20,7 @@ from PyQt4 import Qt
 from gnuradio import blocks
 from gnuradio import digital
 from gnuradio import eng_notation
+from gnuradio import fec
 from gnuradio import gr
 from gnuradio import qtgui
 from gnuradio.eng_option import eng_option
@@ -65,12 +66,15 @@ class gfsk_loopback(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate = 32000
         self.fm_sensitivity = fm_sensitivity = 1
 
+
+        self.enc = enc = fec.tpc_encoder_make(([3]), ([43]), 26, 6, 9, 3);
+
+
+        self.dec = dec = fec.tpc_decoder_make(([3]), ([43]), 26, 6, 9, 3, 6, 0);
+
         ##################################################
         # Blocks
         ##################################################
-        self._fm_sensitivity_range = Range(0, 10, 0.01, 1, 200)
-        self._fm_sensitivity_win = RangeWidget(self._fm_sensitivity_range, self.set_fm_sensitivity, "fm_sensitivity", "counter_slider", float)
-        self.top_grid_layout.addWidget(self._fm_sensitivity_win)
         self.qtgui_time_sink_x_1_1 = qtgui.time_sink_f(
         	1024, #size
         	samp_rate, #samp_rate
@@ -186,26 +190,34 @@ class gfsk_loopback(gr.top_block, Qt.QWidget):
 
 
 
-        self.digital_gfsk_mod_0 = digital.gfsk_mod(
-        	samples_per_symbol=sps,
-        	sensitivity=fm_sensitivity,
+        self._fm_sensitivity_range = Range(0, 10, 0.01, 1, 200)
+        self._fm_sensitivity_win = RangeWidget(self._fm_sensitivity_range, self.set_fm_sensitivity, "fm_sensitivity", "counter_slider", float)
+        self.top_grid_layout.addWidget(self._fm_sensitivity_win)
+        self.fec_extended_encoder_0 = fec.extended_encoder(encoder_obj_list=enc, threading= None, puncpat='11')
+        self.fec_extended_decoder_0 = fec.extended_decoder(decoder_obj_list=dec, threading= None, ann=None, puncpat='11', integration_period=10000)
+        self.digital_scrambler_bb_0 = digital.scrambler_bb(0x8A, 0x7F, 7)
+        self.digital_map_bb_0 = digital.map_bb(([-1, 1]))
+        self.digital_gmsk_mod_0 = digital.gmsk_mod(
+        	samples_per_symbol=4,
         	bt=0.35,
         	verbose=False,
         	log=False,
         )
-        self.digital_gfsk_demod_0 = digital.gfsk_demod(
-        	samples_per_symbol=sps,
-        	sensitivity=fm_sensitivity,
+        self.digital_gmsk_demod_0 = digital.gmsk_demod(
+        	samples_per_symbol=4,
         	gain_mu=0.175,
         	mu=0.5,
         	omega_relative_limit=0.005,
         	freq_error=0.0,
-        	verbose=True,
+        	verbose=False,
         	log=False,
         )
+        self.digital_descrambler_bb_0 = digital.descrambler_bb(0x8A, 0x7F, 7)
         self.blocks_vector_source_x_0 = blocks.vector_source_b((0, 0, 0x55, 0x55), True, 1, [])
         self.blocks_unpack_k_bits_bb_0 = blocks.unpack_k_bits_bb(8)
         self.blocks_throttle_0_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
+        self.blocks_pack_k_bits_bb_0 = blocks.pack_k_bits_bb(8)
+        self.blocks_char_to_float_0_1 = blocks.char_to_float(1, 1)
         self.blocks_char_to_float_0_0 = blocks.char_to_float(1, 1)
         self.blocks_char_to_float_0 = blocks.char_to_float(1, 1)
 
@@ -216,13 +228,20 @@ class gfsk_loopback(gr.top_block, Qt.QWidget):
         ##################################################
         self.connect((self.blocks_char_to_float_0, 0), (self.qtgui_time_sink_x_1_1, 0))
         self.connect((self.blocks_char_to_float_0_0, 0), (self.qtgui_time_sink_x_1, 0))
-        self.connect((self.blocks_throttle_0_0, 0), (self.digital_gfsk_demod_0, 0))
+        self.connect((self.blocks_char_to_float_0_1, 0), (self.fec_extended_decoder_0, 0))
+        self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.digital_gmsk_mod_0, 0))
+        self.connect((self.blocks_throttle_0_0, 0), (self.digital_gmsk_demod_0, 0))
         self.connect((self.blocks_throttle_0_0, 0), (self.qtgui_sink_x_0, 0))
         self.connect((self.blocks_unpack_k_bits_bb_0, 0), (self.blocks_char_to_float_0, 0))
+        self.connect((self.blocks_unpack_k_bits_bb_0, 0), (self.digital_scrambler_bb_0, 0))
         self.connect((self.blocks_vector_source_x_0, 0), (self.blocks_unpack_k_bits_bb_0, 0))
-        self.connect((self.blocks_vector_source_x_0, 0), (self.digital_gfsk_mod_0, 0))
-        self.connect((self.digital_gfsk_demod_0, 0), (self.blocks_char_to_float_0_0, 0))
-        self.connect((self.digital_gfsk_mod_0, 0), (self.blocks_throttle_0_0, 0))
+        self.connect((self.digital_descrambler_bb_0, 0), (self.blocks_char_to_float_0_0, 0))
+        self.connect((self.digital_gmsk_demod_0, 0), (self.digital_map_bb_0, 0))
+        self.connect((self.digital_gmsk_mod_0, 0), (self.blocks_throttle_0_0, 0))
+        self.connect((self.digital_map_bb_0, 0), (self.blocks_char_to_float_0_1, 0))
+        self.connect((self.digital_scrambler_bb_0, 0), (self.fec_extended_encoder_0, 0))
+        self.connect((self.fec_extended_decoder_0, 0), (self.digital_descrambler_bb_0, 0))
+        self.connect((self.fec_extended_encoder_0, 0), (self.blocks_pack_k_bits_bb_0, 0))
 
     def closeEvent(self, event):
         self.settings = Qt.QSettings("GNU Radio", "gfsk_loopback")
@@ -250,6 +269,18 @@ class gfsk_loopback(gr.top_block, Qt.QWidget):
 
     def set_fm_sensitivity(self, fm_sensitivity):
         self.fm_sensitivity = fm_sensitivity
+
+    def get_enc(self):
+        return self.enc
+
+    def set_enc(self, enc):
+        self.enc = enc
+
+    def get_dec(self):
+        return self.dec
+
+    def set_dec(self, dec):
+        self.dec = dec
 
 
 def main(top_block_cls=gfsk_loopback, options=None):
